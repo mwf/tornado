@@ -449,7 +449,7 @@ class HTTPRequest(object):
     def request_continue(self):
         '''Send a 100-Continue, telling the client to send the request body'''
         if self.headers.get("Expect") == "100-continue":
-            self.connection.stream.write(b("HTTP/1.1 100 (Continue)\r\n\r\n"))
+            self.connection.stream.write(b"HTTP/1.1 100 (Continue)\r\n\r\n")
 
     def _read_body(self, exec_req_cb):
         self.request_continue()

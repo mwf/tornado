@@ -1273,7 +1273,7 @@ def stream_body(cls):
     when a PUT or POST handler method is executed. It is up to the request
     handler to read the body from the stream in the HTTP connection.
 
-    Using this decorator automatically implies the asynchronous decorator.
+    Using this decorator, you still need the asynchronous decorator!
 
     Without this decorator, the request body is automatically read and
     parsed before a PUT or POST method is executed. ::
@@ -1281,6 +1281,7 @@ def stream_body(cls):
        @web.stream_body
        class StreamHandler(web.RequestHandler):
 
+           @web.asynchronous
            def put(self):
                self.read_bytes = 0
                self.request.request_continue()
@@ -1306,10 +1307,6 @@ def stream_body(cls):
             if args[0]._wsgi:
                 raise Exception("@stream_body is not supported for WSGI apps")
             self._read_body = False
-            if hasattr(cls, 'post'):
-                cls.post = asynchronous(cls.post)
-            if hasattr(cls, 'put'):
-                cls.put = asynchronous(cls.put)
             cls.__init__(self, *args, **kwargs)
     return StreamBody
 
